@@ -13,7 +13,10 @@
 	}
 
 	async function updateRestaurants() {
-		restaurants = await getRestaurants({ ...selectedCoordinates, cuisineIds: [selectedCuisineId] });
+		restaurants = await getRestaurants({
+			...selectedCoordinates,
+			cuisineIds: selectedCuisineId ? [selectedCuisineId] : undefined
+		});
 	}
 </script>
 
