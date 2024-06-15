@@ -13,7 +13,7 @@
 	}
 
 	async function updateRestaurants() {
-		restaurants = await getRestaurants({
+		restaurants = getRestaurants({
 			...selectedCoordinates,
 			cuisineIds: selectedCuisineId ? [selectedCuisineId] : undefined
 		});
@@ -30,20 +30,30 @@
 	>
 		<option value={0}>international</option>
 		<hr />
-		{#each data.availableCuisines as cuisine}
-			<option value={cuisine.id}>{cuisine.name}</option>
-		{/each}
+		{#if data.availableCuisines.isLoading || !data.availableCuisines}
+			<option disabled>Loading...</option>
+		{:else}
+			<option disabled>Select a cuisine</option>
+			{#each data.availableCuisines.data || [] as cuisine}
+				<option value={cuisine.id}>{cuisine.name}</option>
+			{/each}
+		{/if}
+
 		<hr />
 		<option disabled>More options coming soon!</option>
 	</select>
 	cuisine near <input bind:value={selectedCity} onchange={lookupLocation} type="text" />
 </div>
 
-{#if restaurants.length === 0}
+{#if restaurants.isLoading}
+	<p>Loading...</p>
+{:else if restaurants.error}
+	<p>There was an error loading the restaurants. Please try again later.</p>
+{:else if !restaurants.data || restaurants.data?.length === 0}
 	<p>No restaurants were found. If you have any recommendations, please let us know!</p>
 {:else}
 	<ul>
-		{#each restaurants as restaurant}
+		{#each restaurants.data as restaurant}
 			<li>
 				<h2>{restaurant.name}</h2>
 			</li>
