@@ -1,0 +1,125 @@
+/* CSS Reset */
+
+/* Reset box-sizing to border-box */
+*,
+*::before,
+*::after {
+	box-sizing: border-box;
+}
+
+/* Remove default margin and padding */
+body,
+h1,
+h2,
+h3,
+h4,
+h5,
+h6,
+p,
+ol,
+ul {
+	margin: 0;
+	padding: 0;
+}
+
+/* Remove list styles */
+ol,
+ul {
+	list-style: none;
+}
+
+/* Remove default anchor styles */
+a {
+	text-decoration: none;
+	color: inherit;
+}
+
+/* Reset font styles */
+body {
+	font-size: 16px;
+	line-height: 1.5;
+}
+
+/* Reset heading styles */
+h1,
+h2,
+h3,
+h4,
+h5,
+h6 {
+	font-weight: normal;
+}
+
+/* Reset form styles */
+input,
+textarea,
+button {
+	font-family: inherit;
+}
+
+/* Design tokens */
+
+:root {
+	/* Colors */
+	--color-primary: #bf3632;
+	--color-secondary: #f2f2f2;
+	--color-tertiary: #221e26;
+	/* Spacing */
+	--grid-1: 4px;
+	--grid-2: 8px;
+	--grid-3: 12px;
+	--grid-4: 16px;
+	--grid-6: 24px;
+	--grid-8: 32px;
+	--grid-10: 40px;
+	--grid-12: 48px;
+	--grid-14: 56px;
+	/** Other */
+	--window-width: min(1440px, 90vw);
+}
+
+:root {
+	--bg-primary: #edeef6;
+	--fg-primary: #221e26;
+	--color: #bf3632;
+}
+
+/* @media (prefers-color-scheme: dark) {
+	:root {
+		--bg-primary: #221e26;
+		--fg-primary: #edeef6;
+		--color: var(--d-color);
+	}
+} */
+
+@font-face {
+	font-family: 'Volkhov';
+	src: url('Volkhov-Regular.ttf');
+	font-weight: normal;
+	font-style: normal;
+}
+
+@font-face {
+	font-family: 'Halant';
+	src: url('Halant-Light.ttf');
+	font-weight: light;
+	font-style: normal;
+}
+
+/* Global styles */
+body {
+	background-color: var(--bg-primary);
+	color: var(--fg-primary);
+	accent-color: var(--color);
+	font-family: Halant, serif;
+	font-size: 20px;
+}
+
+h1,
+h2,
+h3,
+h4,
+h5,
+h6 {
+	font-family: Volkhov, serif;
+}

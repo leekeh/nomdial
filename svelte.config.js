@@ -17,7 +17,8 @@ const config = {
 		adapter: adapter(),
 		alias: {
 			db: 'src/lib/db',
-			api: 'src/lib/api'
+			api: 'src/lib/api',
+			components: 'src/lib/components'
 		}
 	}
 };
