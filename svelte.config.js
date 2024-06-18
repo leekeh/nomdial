@@ -18,7 +18,8 @@ const config = {
 		alias: {
 			db: 'src/lib/db',
 			api: 'src/lib/api',
-			components: 'src/lib/components'
+			components: 'src/lib/components',
+			types: 'src/lib/types'
 		}
 	}
 };

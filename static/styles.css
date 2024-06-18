@@ -93,16 +93,30 @@ button {
 } */
 
 @font-face {
-	font-family: 'Volkhov';
-	src: url('Volkhov-Regular.ttf');
+	font-family: 'MomsTypewriter';
+	src: url('fonts/MomsTypewriter.ttf');
 	font-weight: normal;
 	font-style: normal;
 }
 
 @font-face {
-	font-family: 'Halant';
-	src: url('Halant-Light.ttf');
-	font-weight: light;
+	font-family: 'OceansideTypewriter';
+	src: url('fonts/fons/OceansideTypewriter.ttf');
+	font-weight: normal;
+	font-style: italic;
+}
+
+@font-face {
+	font-family: 'OldNewspaperTypes';
+	src: url('fonts/OldNewspaperTypes.ttf');
+	font-weight: normal;
+	font-style: normal;
+}
+
+@font-face {
+	font-family: 'BambiHandwritten';
+	src: url('fonts/BambiHandwritten.ttf');
+	font-weight: normal;
 	font-style: normal;
 }
 

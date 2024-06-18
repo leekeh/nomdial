@@ -3,6 +3,21 @@ export type Json = string | number | boolean | null | { [key: string]: Json | un
 export type Database = {
 	public: {
 		Tables: {
+			countries: {
+				Row: {
+					iso_code: string;
+					iso_name: string | null;
+				};
+				Insert: {
+					iso_code: string;
+					iso_name?: string | null;
+				};
+				Update: {
+					iso_code?: string;
+					iso_name?: string | null;
+				};
+				Relationships: [];
+			};
 			cuisine_restaurants: {
 				Row: {
 					cuisine_id: number;
@@ -70,30 +85,50 @@ export type Database = {
 			};
 			restaurants: {
 				Row: {
-					address: string | null;
+					address_lines: string[] | null;
+					city: string | null;
+					country_code: string;
 					created_at: string;
 					id: number;
-					location: unknown | null;
+					location: unknown;
 					maps_id: string | null;
-					name: string | null;
+					name: string;
+					osm_id: number | null;
+					website: string | null;
 				};
 				Insert: {
-					address?: string | null;
+					address_lines?: string[] | null;
+					city?: string | null;
+					country_code: string;
 					created_at?: string;
 					id?: number;
-					location?: unknown | null;
+					location: unknown;
 					maps_id?: string | null;
-					name?: string | null;
+					name: string;
+					osm_id?: number | null;
+					website?: string | null;
 				};
 				Update: {
-					address?: string | null;
+					address_lines?: string[] | null;
+					city?: string | null;
+					country_code?: string;
 					created_at?: string;
 					id?: number;
-					location?: unknown | null;
+					location?: unknown;
 					maps_id?: string | null;
-					name?: string | null;
+					name?: string;
+					osm_id?: number | null;
+					website?: string | null;
 				};
-				Relationships: [];
+				Relationships: [
+					{
+						foreignKeyName: 'restaurants_country_code_fkey';
+						columns: ['country_code'];
+						isOneToOne: false;
+						referencedRelation: 'countries';
+						referencedColumns: ['iso_code'];
+					}
+				];
 			};
 		};
 		Views: {
@@ -120,6 +155,11 @@ export type Database = {
 							lat: number;
 							long: number;
 							dist_meters: number;
+							city: string;
+							website: string;
+							maps_id: string;
+							address_lines: string[];
+							cuisines: string[];
 						}[];
 				  }
 				| {
@@ -134,6 +174,11 @@ export type Database = {
 							lat: number;
 							long: number;
 							dist_meters: number;
+							city: string;
+							website: string;
+							maps_id: string;
+							address_lines: string[];
+							cuisines: string[];
 						}[];
 				  };
 		};
