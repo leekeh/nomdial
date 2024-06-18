@@ -28,7 +28,7 @@
 			const marker = L.marker([point.lat, point.lon]).addTo(map);
 			marker.addEventListener('click', () => {
 				console.log('click');
-				document.getElementById(point.id)?.scrollIntoView();
+				document.getElementById(point.id)?.scrollIntoView({ behavior: 'smooth' });
 			});
 		});
 	});
