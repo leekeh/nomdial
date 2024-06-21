@@ -25,27 +25,28 @@
 		font-family: 'OldNewspaperTypes';
 	}
 
+	.hasBorder {
+		background: transparent;
+	}
+
 	.hasBorder::before {
 		position: absolute;
+		filter: url(#squiggle);
 		content: '';
 		top: 2px;
 		left: 2px;
 		right: 1px;
 		bottom: 3px;
 		border: 2px solid var(--fg-primary);
-		border-radius: 255px 15px 225px 10px/5px 225px 2px 255px;
 		pointer-events: none;
+		overflow: hidden;
+		z-index: -1;
+		background: #fff;
+		box-shadow: rgba(17, 12, 46, 0.15) 0px 48px 100px 0px;
 	}
 
 	.hasBorder:nth-of-type(2n)::before {
-		top: 6px;
-		left: 3px;
-		right: 5px;
-		bottom: 4px;
-	}
-
-	.hasBorder:nth-of-type(3n)::before {
-		border-radius: 255px 5px 225px 5px/5px 225px 10px 255px;
+		filter: url(#displaced);
 	}
 
 	@media (min-width: 768px) {
