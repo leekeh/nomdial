@@ -19,6 +19,7 @@ const config = {
 			db: 'src/lib/db',
 			api: 'src/lib/api',
 			components: 'src/lib/components',
+			icons: 'src/lib/icons',
 			types: 'src/lib/types'
 		}
 	}

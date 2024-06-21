@@ -137,3 +137,10 @@ h5,
 h6 {
 	font-family: Volkhov, serif;
 }
+
+button {
+	border: none;
+	background-color: transparent;
+	font-size: inherit;
+	cursor: pointer;
+}

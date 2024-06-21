@@ -2,12 +2,12 @@
 	import type { ChangeEventHandler } from 'svelte/elements';
 	import { getRestaurants } from 'api';
 	import Map from './map.svelte';
-	import RestaurantCard from 'components/Card.svelte';
-	import Logo from 'components/Logo.svelte';
 	import { Card } from 'components';
+	import { ExternalIcon, FoodIcon, PinIcon } from 'icons';
 	let { data } = $props();
 
 	let selectedCuisineId = $state(0);
+	let highlightedRestaurantId = $state<number>();
 	let selectedCity = $state(data.clientLocation.city);
 	let restaurants = $state(data.restaurants);
 	let selectedCoordinates = data.clientLocation.coordinates;
@@ -21,6 +21,11 @@
 			...selectedCoordinates,
 			cuisineIds: selectedCuisineId ? [selectedCuisineId] : undefined
 		});
+	}
+
+	function highlightRestaurant(id: number) {
+		highlightedRestaurantId = id;
+		document.getElementById('map')?.scrollIntoView({ behavior: 'smooth' });
 	}
 </script>
 
@@ -52,9 +57,12 @@
 			focus={data.clientLocation.coordinates}
 			points={restaurants.data?.map((restaurant) => ({
 				id: restaurant.id,
+				label: restaurant.name,
 				lat: restaurant.lat,
 				lon: restaurant.long
 			}))}
+			highlightFunction={highlightRestaurant}
+			highlightedId={highlightedRestaurantId}
 		/>
 		<div class="results">
 			{#if restaurants.isLoading}
@@ -91,6 +99,7 @@
 										type: 'conjunction'
 									}).format(restaurant.cuisines)}
 								</p>
+								<hr />
 								<address>
 									Address: {restaurant.address_lines.join('\n')}
 								</address>
@@ -99,8 +108,19 @@
 									target="_blank"
 								>
 									Get directions
+									<ExternalIcon />
 								</a>
-								<a href={restaurant.website}>{restaurant.website} </a>
+								<div class="actions">
+									<button onclick={() => highlightRestaurant(restaurant.id)}>
+										View on map <PinIcon />
+									</button>
+									<button
+										onclick={() => alert('Feature coming soon!')}
+										aria-label={`details ${restaurant.name}`}
+									>
+										Details <FoodIcon />
+									</button>
+								</div>
 							</article>
 						</Card>
 					{/each}
@@ -162,5 +182,30 @@
 			inset 0 -40px 40px rgba(184, 188, 80, 0.06),
 			inset 0 25px 10px rgba(224, 215, 45, 0.06),
 			0 5px 6px 5px rgba(0, 0, 0, 0.03);
+	}
+
+	hr {
+		border-top: 2px solid currentColor;
+		filter: url(#displaced);
+		width: 50%;
+	}
+
+	button {
+		outline: 2px solid currentColor;
+		border-radius: 500px;
+		padding: 0.5rem 1rem;
+		filter: url(#squiggle);
+	}
+
+	button:hover {
+		box-shadow: rgba(100, 100, 111, 0.2) 0px 7px 29px 0px;
+	}
+
+	.actions {
+		display: flex;
+		gap: var(--grid-2);
+		padding: var(--grid-4) 0 0;
+		flex-wrap: wrap;
+		width: 100%;
 	}
 </style>

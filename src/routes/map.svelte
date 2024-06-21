@@ -4,32 +4,42 @@
 	import type { Coordinates } from 'types';
 
 	type Props = {
-		points: Array<{ id: string } & Coordinates>;
+		points: Array<{ id: number; label: string } & Coordinates>;
 		focus: Coordinates;
+		highlightedId?: number;
 	};
-	let { focus, points }: Props = $props();
+	let { focus, points, highlightedId }: Props = $props();
 
 	let map = $state<Map>();
 	onMount(() => {
 		map = L.map('map').setView([focus.lat, focus.lon], 13);
-		L.tileLayer(
-			'https://watercolormaps.collection.cooperhewitt.org/tile/watercolor/{z}/{x}/{y}.jpg',
-			{
-				maxZoom: 19,
-				attribution: '&copy; <a href="http://www.openstreetmap.org/copyright">OpenStreetMap</a>'
-			}
-		).addTo(map);
+		L.tileLayer('https://tile.openstreetmap.org/{z}/{x}/{y}.png', {
+			maxZoom: 19,
+			attribution: '&copy; <a href="http://www.openstreetmap.org/copyright">OpenStreetMap</a>',
+			detectRetina: true
+		}).addTo(map);
 	});
 
 	$effect(() => {
 		if (map === undefined) return;
 		points.forEach((point) => {
-			const marker = L.marker([point.lat, point.lon]).addTo(map);
+			const marker = L.marker([point.lat, point.lon], {
+				title: `marker ${point.id.toString()}`,
+				alt: point.label
+			}).addTo(map);
 			marker.addEventListener('click', () => {
-				console.log('click');
 				document.getElementById(point.id)?.scrollIntoView({ behavior: 'smooth' });
 			});
+			marker.bindPopup(`<p>${point.label}</p>`).openPopup();
 		});
+	});
+
+	$effect(() => {
+		const point = points.find((point) => point.id === highlightedId);
+		if (point) {
+			map?.setView([point.lat, point.lon], 18);
+			const marker = document.querySelector(`[title="marker ${point.id}"]`)?.click();
+		}
 	});
 </script>
 
@@ -60,6 +70,6 @@
 		}
 	}
 	#map {
-		height: 450px;
+		height: 90vh;
 	}
 </style>
