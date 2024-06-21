@@ -2,7 +2,6 @@
 	import type { Map } from '@types/leaflet';
 	import { onMount } from 'svelte';
 	import type { Coordinates } from 'types';
-	import Layout from './+layout.svelte';
 
 	type Props = {
 		points: Array<{ id: string } & Coordinates>;
@@ -35,7 +34,7 @@
 </script>
 
 <div class="mapContainer">
-	<div id="map">{map}</div>
+	<div id="map"></div>
 </div>
 
 <style>
