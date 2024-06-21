@@ -19,12 +19,14 @@
 			iconAnchor: [25, 50], // point of the icon which will correspond to marker's location
 			popupAnchor: [0, -50] // point from which the popup should open relative to the iconAnchor
 		});
-		map = L.map('map').setView([focus.lat, focus.lon], 13);
+		map = L.map('map');
 		L.tileLayer('https://tile.openstreetmap.org/{z}/{x}/{y}.png', {
 			attribution: '&copy; <a href="http://www.openstreetmap.org/copyright">OpenStreetMap</a>',
 			detectRetina: true,
 			maxZoom: 20
 		}).addTo(map);
+		map.setView([focus.lat, focus.lon], 13);
+		map.setView([focus.lat, focus.lon], 13);
 	});
 
 	$effect(() => {
@@ -38,13 +40,14 @@
 			marker.addEventListener('click', () => {
 				document.getElementById(point.id)?.scrollIntoView({ behavior: 'smooth' });
 			});
-			marker.bindPopup(`<p>${point.label}</p>`).openPopup();
+			marker.bindPopup(`<p>${point.label}</p>`);
 		});
 	});
 
 	$effect(() => {
 		const point = points.find((point) => point.id === highlightedId);
 		if (point) {
+			console.log('hihi');
 			map?.setView([point.lat, point.lon], 18);
 			document.querySelector(`[title="marker ${point.id}"]`)?.click();
 		}
