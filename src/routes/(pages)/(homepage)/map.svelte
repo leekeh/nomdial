@@ -1,23 +1,23 @@
 <script lang="ts">
-	import type { Map } from '@types/leaflet';
+	import type { Map, Icon } from 'leaflet';
 	import { onMount } from 'svelte';
 	import type { Coordinates } from 'types';
+	import { createRestaurantId } from './util';
 
 	type Props = {
-		points: Array<{ id: number; label: string } & Coordinates>;
+		points?: Array<{ id: number; label: string } & Coordinates>;
 		focus: Coordinates;
-		highlightedId?: number;
 	};
-	let { focus, points, highlightedId }: Props = $props();
+	let { focus, points }: Props = $props();
 
 	let map = $state<Map>();
-	let icon = $state<L.Icon>();
+	let icon = $state<Icon>();
 	onMount(() => {
 		icon = L.icon({
 			iconUrl: 'marker.png',
-			iconSize: [50, 50], // size of the icon
-			iconAnchor: [25, 50], // point of the icon which will correspond to marker's location
-			popupAnchor: [0, -50] // point from which the popup should open relative to the iconAnchor
+			iconSize: [50, 50],
+			iconAnchor: [25, 50],
+			popupAnchor: [0, -50]
 		});
 		map = L.map('map');
 		L.tileLayer('https://tile.openstreetmap.org/{z}/{x}/{y}.png', {
@@ -25,32 +25,49 @@
 			detectRetina: true,
 			maxZoom: 20
 		}).addTo(map);
-		map.setView([focus.lat, focus.lon], 13);
-		map.setView([focus.lat, focus.lon], 13);
+		map!.setView([focus.lat, focus.lon], 13);
+		map!.setView([focus.lat, focus.lon], 13);
+
+		function panRestaurant(e: CustomEvent) {
+			const id = e.detail;
+			const point = points?.find((point) => point.id === id);
+			if (point) {
+				map?.setView([point.lat, point.lon], undefined);
+				(document.querySelector(`[title="marker ${id}"]`) as HTMLElement)?.click();
+			}
+		}
+		document.addEventListener('panMap', panRestaurant);
+		return () => {
+			document.removeEventListener('panMap', panRestaurant);
+		};
 	});
 
 	$effect(() => {
 		if (map === undefined) return;
-		points.forEach((point) => {
+		points?.forEach((point) => {
 			const marker = L.marker([point.lat, point.lon], {
 				title: `marker ${point.id.toString()}`,
 				alt: point.label,
 				icon
 			}).addTo(map);
-			marker.addEventListener('click', () => {
-				document.getElementById(point.id)?.scrollIntoView({ behavior: 'smooth' });
-			});
-			marker.bindPopup(`<p>${point.label}</p>`);
+			const popup = document.createElement('div');
+			const label = document.createElement('p');
+			label.innerHTML = point.label;
+			popup.appendChild(label);
+			const button = document.createElement('button');
+			button.innerHTML = 'Show in list';
+			button.className = 'marker-button';
+			button.onclick = () => {
+				document
+					.getElementById(createRestaurantId(point.id))
+					?.scrollIntoView({ behavior: 'smooth' });
+			};
+			popup.appendChild(button);
+			marker.bindPopup(popup);
 		});
-	});
-
-	$effect(() => {
-		const point = points.find((point) => point.id === highlightedId);
-		if (point) {
-			console.log('hihi');
-			map?.setView([point.lat, point.lon], 18);
-			document.querySelector(`[title="marker ${point.id}"]`)?.click();
-		}
+		return () => {
+			map?.remove();
+		};
 	});
 </script>
 
@@ -90,16 +107,15 @@
 		height: 90vh;
 	}
 
+	/* Adjust leaflet styles */
 	:global(.leaflet-marker-icon) {
 		filter: url(#squiggle);
 	}
-
 	:global(.leaflet-popup-content-wrapper) {
 		position: relative;
 		font-family: OldNewspaperTypes;
 	}
-
-	:global(.leaflet-popup-content-wrapper::before) {
+	:global(.leaflet-popup-content-wrapper::before, .leaflet-bar::before) {
 		position: absolute;
 		content: '';
 		top: 0px;
@@ -109,12 +125,30 @@
 		border-radius: inherit;
 		border: 2px solid var(--fg-primary);
 		filter: url(#displaced);
+		pointer-events: none;
 	}
-
 	:global(.leaflet-popup-tip),
 	:global(.leaflet-popup-close-button) {
 		border: 2px solid var(--fg-primary);
+		border-left: none;
+		border-top: none;
 		filter: url(#displaced);
 		color: var(--fg-primary) !important	;
+		box-shadow: none;
+	}
+	:global(.leaflet-popup-tip-container) {
+		overflow: visible;
+	}
+	:global(.leaflet-touch .leaflet-bar) {
+		border: none;
+	}
+	:global(.leaflet-touch .leaflet-bar a) {
+		border-color: var(--fg-primary);
+		border-width: 2px;
+	}
+
+	:global(.marker-button) {
+		text-decoration: underline solid;
+		text-underline-offset: 0.2rem;
 	}
 </style>

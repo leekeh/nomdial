@@ -144,3 +144,8 @@ button {
 	font-size: inherit;
 	cursor: pointer;
 }
+
+a {
+	color: #284283;
+	text-decoration: underline;
+}

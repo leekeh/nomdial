@@ -1,5 +1,6 @@
 import { supabase } from 'db';
 import { useSupabase, type Config } from './util.svelte';
+import type { Database } from 'db/supabase.model';
 
 type getRestaurantsProps = {
 	lat: number;
@@ -18,3 +19,5 @@ export function getRestaurants({ lat, lon, cuisineIds }: getRestaurantsProps, co
 		config
 	);
 }
+
+export type Restaurants = Database['public']['Functions']['nearby_restaurants']['Returns'];

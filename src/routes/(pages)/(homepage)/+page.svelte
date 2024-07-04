@@ -1,13 +1,14 @@
 <script lang="ts">
 	import type { ChangeEventHandler } from 'svelte/elements';
 	import { getRestaurants } from 'api';
-	import Map from './map.svelte';
+	import Map from './Map.svelte';
 	import { Card } from 'components';
-	import { ExternalIcon, FoodIcon, PinIcon } from 'icons';
+
+	import Restaurants from './Restaurants.svelte';
+
 	let { data } = $props();
 
 	let selectedCuisineId = $state(0);
-	let highlightedRestaurantId = $state<number>();
 	let selectedCity = $state(data.clientLocation.city);
 	let restaurants = $state(data.restaurants);
 	let selectedCoordinates = data.clientLocation.coordinates;
@@ -21,11 +22,6 @@
 			...selectedCoordinates,
 			cuisineIds: selectedCuisineId ? [selectedCuisineId] : undefined
 		});
-	}
-
-	function highlightRestaurant(id: number) {
-		highlightedRestaurantId = id;
-		document.getElementById('map')?.scrollIntoView({ behavior: 'smooth' });
 	}
 </script>
 
@@ -61,8 +57,6 @@
 				lat: restaurant.lat,
 				lon: restaurant.long
 			}))}
-			highlightFunction={highlightRestaurant}
-			highlightedId={highlightedRestaurantId}
 		/>
 		<div class="results">
 			{#if restaurants.isLoading}
@@ -75,56 +69,7 @@
 			{:else if !restaurants.data || restaurants.data?.length === 0}
 				<p>No restaurants were found. If you have any recommendations, please let us know!</p>
 			{:else}
-				<ul>
-					{#each restaurants.data as restaurant}
-						<Card tagName="li" hasBorder id={restaurant.id.toString()}>
-							<article>
-								<h2>{restaurant.name}</h2>
-								<img src="https://placehold.co/200x200" alt="" />
-
-								{restaurant.dist_meters > 1000
-									? new Intl.NumberFormat('en', {
-											style: 'unit',
-											unit: 'kilometer',
-											maximumFractionDigits: 0
-										}).format(restaurant.dist_meters / 1000)
-									: new Intl.NumberFormat('en', {
-											style: 'unit',
-											unit: 'meter',
-											maximumFractionDigits: 0
-										}).format(restaurant.dist_meters)} away
-								<p>
-									Cuisines: {new Intl.ListFormat('en', {
-										style: 'long',
-										type: 'conjunction'
-									}).format(restaurant.cuisines)}
-								</p>
-								<hr />
-								<address>
-									Address: {restaurant.address_lines.join('\n')}
-								</address>
-								<a
-									href={`https://www.google.com/maps/dir/?api=1&destination=${restaurant.name}${restaurant.maps_id ? `&destination_place_id=${restaurant.maps_id}` : ''}`}
-									target="_blank"
-								>
-									Get directions
-									<ExternalIcon />
-								</a>
-								<div class="actions">
-									<button onclick={() => highlightRestaurant(restaurant.id)}>
-										View on map <PinIcon />
-									</button>
-									<button
-										onclick={() => alert('Feature coming soon!')}
-										aria-label={`details ${restaurant.name}`}
-									>
-										Details <FoodIcon />
-									</button>
-								</div>
-							</article>
-						</Card>
-					{/each}
-				</ul>
+				<Restaurants restaurants={restaurants.data} />
 			{/if}
 		</div>
 	</main>
@@ -135,18 +80,6 @@
 		float: right;
 		border: 5px solid #fff;
 		outline: 1px solid #ccc;
-	}
-	article {
-		padding: var(--grid-2);
-	}
-	ul {
-		display: flex;
-		flex-direction: column;
-		gap: var(--grid-2);
-	}
-	a {
-		color: #284283;
-		text-decoration: underline;
 	}
 
 	main {
@@ -166,9 +99,6 @@
 		overflow: auto;
 	}
 
-	h2 {
-		font-family: 'OldNewspaperTypes';
-	}
 	#query {
 		background-color: #ffc;
 		padding: 1rem;
@@ -188,24 +118,5 @@
 		border-top: 2px solid currentColor;
 		filter: url(#displaced);
 		width: 50%;
-	}
-
-	button {
-		outline: 2px solid currentColor;
-		border-radius: 500px;
-		padding: 0.5rem 1rem;
-		filter: url(#squiggle);
-	}
-
-	button:hover {
-		box-shadow: rgba(100, 100, 111, 0.2) 0px 7px 29px 0px;
-	}
-
-	.actions {
-		display: flex;
-		gap: var(--grid-2);
-		padding: var(--grid-4) 0 0;
-		flex-wrap: wrap;
-		width: 100%;
 	}
 </style>
