@@ -1,32 +1,22 @@
-import type { ServerLoadEvent } from '@sveltejs/kit';
+import { APICall, asyncAPICall, type Fetch } from 'api/util.svelte';
 import { z } from 'zod';
 
-/**
- * Get the user's location from their IP address,
- * so we have a nice default search radius.
- */
-export async function getLocationFromIp(evt: ServerLoadEvent) {
-	const defaultLocation = {
-		city: 'Utrecht',
-		coordinates: {
-			lat: 52.0907,
-			lon: 5.1214
-		}
-	};
+const locationSchema = z.object({
+	lat: z.number(),
+	lon: z.number(),
+	city: z.string()
+});
 
-	try {
-		const userIP = evt.getClientAddress();
-		if (!userIP || userIP === '::1') {
-			return defaultLocation;
-		}
-		const schema = z.object({
-			lat: z.number(),
-			lon: z.number(),
-			city: z.string()
-		});
-		const result = evt.fetch(`http://ip-api.com/json/${userIP}?fields=city,lat,lon`);
-		const { city, lat, lon } = await (await result).json().then((data) => schema.parse(data));
-		return { city, coordinates: { lat, lon } };
-	} catch (error) {}
-	return defaultLocation;
+export type Location = z.infer<typeof locationSchema>;
+
+export function getLocationFromIp(ip: string) {
+	const headers = new Headers();
+	headers.append('X-Forwarded-For', ip);
+	return APICall(`/api/locationFromIp/`, { method: 'GET', headers }, locationSchema);
+}
+
+export async function getLocationFromIpAsync(ip: string, passedFetch: Fetch) {
+	const headers = new Headers();
+	headers.append('X-Forwarded-For', ip);
+	return asyncAPICall(`locationFromIp/`, { method: 'GET', headers }, locationSchema, passedFetch);
 }

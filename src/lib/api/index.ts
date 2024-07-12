@@ -1,5 +1,4 @@
-export { getRestaurants } from './supabase/restaurants';
-export { getAvailableCuisines } from './supabase/cuisines';
-export { useSupabase } from './supabase/util.svelte';
-
-export { getLocationFromIp } from './locations';
+export * from './restaurant';
+export * from './cuisines';
+export * from './restaurantsByLocation';
+export * from './locations';

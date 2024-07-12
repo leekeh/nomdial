@@ -12,7 +12,8 @@
 		"lint": "prettier --check . && eslint .",
 		"format": "prettier --write .",
 		"test:integration": "playwright test",
-		"test:unit": "vitest"
+		"test:unit": "vitest",
+		"update-zod-schemas": "supabase-to-zod --input src/lib/db/supabase.model.d.ts --output src/lib/db/supabase.schemas.ts"
 	},
 	"devDependencies": {
 		"@playwright/test": "^1.28.1",
@@ -41,6 +42,7 @@
 		"install": "^0.13.0",
 		"leaflet": "^1.9.4",
 		"npm": "^10.8.1",
+		"supabase-to-zod": "^1.0.7",
 		"zod": "^3.23.8"
 	}
 }

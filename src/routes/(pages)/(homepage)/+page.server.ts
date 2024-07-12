@@ -1,15 +1,21 @@
-import { getLocationFromIp, getRestaurants } from 'api';
-import { getAvailableCuisines } from 'api';
+import { getLocationFromIpAsync, getRestaurantsByLocationAsync, getCuisinesAsync } from 'api';
 
-export async function load(evt) {
-	const clientLocation = await getLocationFromIp(evt);
+const defaultLocation = {
+	city: 'Utrecht',
+	lat: 52.0907,
+	lon: 5.1214
+};
+
+export async function load({ getClientAddress, fetch }) {
+	const clientLocation = await getLocationFromIpAsync(getClientAddress(), fetch);
+	const estimatedLocation = clientLocation.data || defaultLocation;
 	const [restaurants, availableCuisines] = await Promise.all([
-		getRestaurants(clientLocation?.coordinates, { awaitable: true }),
-		getAvailableCuisines({ awaitable: true })
+		getRestaurantsByLocationAsync(estimatedLocation, fetch),
+		getCuisinesAsync(fetch)
 	]);
 	return {
 		restaurants,
 		availableCuisines,
-		clientLocation
+		estimatedLocation
 	};
 }

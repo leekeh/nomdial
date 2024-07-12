@@ -2,9 +2,9 @@
 	import { ExternalIcon, FoodIcon, PinIcon } from 'icons';
 	import { createRestaurantId, formatConjunction, formatDistance, zoomRestaurant } from './util';
 	import { Card } from 'components';
-	import type { Restaurants } from 'api/supabase/restaurants';
+	import type { RestaurantsByLocation } from 'api';
 
-	type Props = { restaurants: Restaurants };
+	type Props = { restaurants: RestaurantsByLocation };
 
 	const { restaurants }: Props = $props();
 </script>
@@ -24,7 +24,7 @@
 				</p>
 				<hr />
 				<address>
-					Address: {restaurant.address_lines.join('\n')}
+					Address: {restaurant.address_lines?.join('\n')}
 				</address>
 				<a
 					href={`https://www.google.com/maps/dir/?api=1&destination=${restaurant.name}${restaurant.maps_id ? `&destination_place_id=${restaurant.maps_id}` : ''}`}
@@ -34,15 +34,16 @@
 					<ExternalIcon />
 				</a>
 				<div class="actions">
-					<button onclick={() => zoomRestaurant(restaurant.id)}>
+					<button class="button" onclick={() => zoomRestaurant(restaurant.id)}>
 						View on map <PinIcon />
 					</button>
-					<button
-						onclick={() => alert('Feature coming soon!')}
+					<a
+						class="button"
+						href={`restaurant/${restaurant.id}`}
 						aria-label={`details ${restaurant.name}`}
 					>
 						Details <FoodIcon />
-					</button>
+					</a>
 				</div>
 			</article>
 		</Card>
@@ -75,14 +76,14 @@
 		width: 50%;
 	}
 
-	button {
+	.button {
 		outline: 2px solid currentColor;
 		border-radius: 500px;
 		padding: 0.5rem 1rem;
 		filter: url(#squiggle);
 	}
 
-	button:hover {
+	.button:hover {
 		box-shadow: rgba(100, 100, 111, 0.2) 0px 7px 29px 0px;
 	}
 

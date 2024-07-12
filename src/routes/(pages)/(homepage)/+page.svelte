@@ -1,6 +1,6 @@
 <script lang="ts">
 	import type { ChangeEventHandler } from 'svelte/elements';
-	import { getRestaurants } from 'api';
+	import { getRestaurantsByLocation } from 'api';
 	import Map from './Map.svelte';
 	import { Card } from 'components';
 
@@ -9,16 +9,18 @@
 	let { data } = $props();
 
 	let selectedCuisineId = $state(0);
-	let selectedCity = $state(data.clientLocation.city);
+	let selectedCity = $state(data.estimatedLocation.city);
 	let restaurants = $state(data.restaurants);
-	let selectedCoordinates = data.clientLocation.coordinates;
+	let selectedCoordinates = { lat: data.estimatedLocation.lat, lon: data.estimatedLocation.lon };
+
+	const z = data.availableCuisines.data;
 
 	function lookupLocation(evt: Parameters<ChangeEventHandler<HTMLInputElement>>['0']) {
 		//todo
 	}
 
 	async function updateRestaurants() {
-		restaurants = getRestaurants({
+		restaurants = getRestaurantsByLocation({
 			...selectedCoordinates,
 			cuisineIds: selectedCuisineId ? [selectedCuisineId] : undefined
 		});
@@ -38,9 +40,11 @@
 				<option disabled>Loading...</option>
 			{:else}
 				<option disabled>Select a cuisine</option>
-				{#each data.availableCuisines.data || [] as cuisine}
-					<option value={cuisine.id}>{cuisine.name}</option>
-				{/each}
+				{#if data.availableCuisines?.data}
+					{#each data.availableCuisines.data as cuisine}
+						<option value={cuisine.id}>{cuisine.name}</option>
+					{/each}
+				{/if}
 			{/if}
 
 			<hr />
@@ -50,7 +54,7 @@
 	</div>
 	<main>
 		<Map
-			focus={data.clientLocation.coordinates}
+			focus={selectedCoordinates}
 			points={restaurants.data?.map((restaurant) => ({
 				id: restaurant.id,
 				label: restaurant.name,

@@ -145,7 +145,7 @@ button {
 	cursor: pointer;
 }
 
-a {
+a[target] {
 	color: #284283;
 	text-decoration: underline;
 }
