@@ -5,6 +5,7 @@
 	import { Card } from 'components';
 
 	import Restaurants from './Restaurants.svelte';
+	import Query from './Query.svelte';
 
 	let { data } = $props();
 
@@ -12,8 +13,6 @@
 	let selectedCity = $state(data.estimatedLocation.city);
 	let restaurants = $state(data.restaurants);
 	let selectedCoordinates = { lat: data.estimatedLocation.lat, lon: data.estimatedLocation.lon };
-
-	const z = data.availableCuisines.data;
 
 	function lookupLocation(evt: Parameters<ChangeEventHandler<HTMLInputElement>>['0']) {
 		//todo
@@ -27,31 +26,9 @@
 	}
 </script>
 
-<div class="layout">
-	<div id="query">
-		I am looking for <select
-			bind:value={selectedCuisineId}
-			onchange={updateRestaurants}
-			name="cuisine"
-		>
-			<option value={0}>international</option>
-			<hr />
-			{#if data.availableCuisines.isLoading || !data.availableCuisines}
-				<option disabled>Loading...</option>
-			{:else}
-				<option disabled>Select a cuisine</option>
-				{#if data.availableCuisines?.data}
-					{#each data.availableCuisines.data as cuisine}
-						<option value={cuisine.id}>{cuisine.name}</option>
-					{/each}
-				{/if}
-			{/if}
+<Query />
 
-			<hr />
-			<option disabled>More options coming soon!</option>
-		</select>
-		cuisine near <input bind:value={selectedCity} onchange={lookupLocation} type="text" />
-	</div>
+<div class="layout">
 	<main>
 		<Map
 			focus={selectedCoordinates}

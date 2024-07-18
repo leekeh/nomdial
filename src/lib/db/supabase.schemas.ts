@@ -81,7 +81,7 @@ export const cuisineRestaurantsRelationshipsSchema = z.tuple([
 ]);
 
 export const cuisinesRowSchema = z.object({
-	created_at: z.string(),
+	created_at: z.nullable(z.string()),
 	id: z.number(),
 	name: z.string()
 });

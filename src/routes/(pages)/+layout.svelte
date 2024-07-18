@@ -1,7 +1,12 @@
 <script>
 	import { Logo, Card } from 'components';
+	import { cuisinesStore } from 'store';
 
-	let { children } = $props();
+	let { children, data } = $props();
+
+	if (data.cuisines.data) {
+		cuisinesStore.set(data.cuisines.data);
+	}
 </script>
 
 <div>
@@ -15,6 +20,7 @@
 		</Card>
 	</footer>
 </div>
+
 <svg xmlns="http://www.w3.org/2000/svg" version="1.1" height="0" width="0">
 	<defs>
 		<filter id="squiggle">
@@ -35,7 +41,7 @@
 
 <style>
 	:global(body) {
-		background-image: url(bg.svg);
+		background-image: url('/background.svg');
 		background-attachment: fixed;
 	}
 	div {

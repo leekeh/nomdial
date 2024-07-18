@@ -1,7 +1,7 @@
 <script lang="ts">
 	import { ExternalIcon, FoodIcon, PinIcon } from 'icons';
 	import { createRestaurantId, formatConjunction, formatDistance, zoomRestaurant } from './util';
-	import { Card } from 'components';
+	import { Button, Card } from 'components';
 	import type { RestaurantsByLocation } from 'api';
 
 	type Props = { restaurants: RestaurantsByLocation };
@@ -34,16 +34,12 @@
 					<ExternalIcon />
 				</a>
 				<div class="actions">
-					<button class="button" onclick={() => zoomRestaurant(restaurant.id)}>
+					<Button onclick={() => zoomRestaurant(restaurant.id)}>
 						View on map <PinIcon />
-					</button>
-					<a
-						class="button"
-						href={`restaurant/${restaurant.id}`}
-						aria-label={`details ${restaurant.name}`}
-					>
+					</Button>
+					<Button href={`restaurant/${restaurant.id}`} aria-label={`details ${restaurant.name}`}>
 						Details <FoodIcon />
-					</a>
+					</Button>
 				</div>
 			</article>
 		</Card>
@@ -74,17 +70,6 @@
 		border-top: 2px solid currentColor;
 		filter: url(#displaced);
 		width: 50%;
-	}
-
-	.button {
-		outline: 2px solid currentColor;
-		border-radius: 500px;
-		padding: 0.5rem 1rem;
-		filter: url(#squiggle);
-	}
-
-	.button:hover {
-		box-shadow: rgba(100, 100, 111, 0.2) 0px 7px 29px 0px;
 	}
 
 	.actions {

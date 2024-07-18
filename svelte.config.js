@@ -20,7 +20,8 @@ const config = {
 			api: 'src/lib/api',
 			components: 'src/lib/components',
 			icons: 'src/lib/icons',
-			types: 'src/lib/types'
+			types: 'src/lib/types',
+			store: 'src/lib/store'
 		}
 	}
 };

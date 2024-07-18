@@ -39,22 +39,8 @@ export type Database = {
 						foreignKeyName: 'Rel Cuisine Restaurants_cuisine_id_fkey';
 						columns: ['cuisine_id'];
 						isOneToOne: false;
-						referencedRelation: 'cuisinerestaurants';
-						referencedColumns: ['cuisine_id'];
-					},
-					{
-						foreignKeyName: 'Rel Cuisine Restaurants_cuisine_id_fkey';
-						columns: ['cuisine_id'];
-						isOneToOne: false;
 						referencedRelation: 'cuisines';
 						referencedColumns: ['id'];
-					},
-					{
-						foreignKeyName: 'Rel Cuisine Restaurants_restaurant_id_fkey';
-						columns: ['restaurant_id'];
-						isOneToOne: false;
-						referencedRelation: 'cuisinerestaurants';
-						referencedColumns: ['restaurant_id'];
 					},
 					{
 						foreignKeyName: 'Rel Cuisine Restaurants_restaurant_id_fkey';
@@ -83,12 +69,28 @@ export type Database = {
 				};
 				Relationships: [];
 			};
+			'geocoding-cache': {
+				Row: {
+					query: string;
+					result: Json;
+				};
+				Insert: {
+					query: string;
+					result: Json;
+				};
+				Update: {
+					query?: string;
+					result?: Json;
+				};
+				Relationships: [];
+			};
 			restaurants: {
 				Row: {
 					address_lines: string[] | null;
 					city: string | null;
 					country_code: string;
 					created_at: string;
+					description: string | null;
 					id: number;
 					location: unknown;
 					maps_id: string | null;
@@ -101,6 +103,7 @@ export type Database = {
 					city?: string | null;
 					country_code: string;
 					created_at?: string;
+					description?: string | null;
 					id?: number;
 					location: unknown;
 					maps_id?: string | null;
@@ -113,6 +116,7 @@ export type Database = {
 					city?: string | null;
 					country_code?: string;
 					created_at?: string;
+					description?: string | null;
 					id?: number;
 					location?: unknown;
 					maps_id?: string | null;
@@ -132,15 +136,7 @@ export type Database = {
 			};
 		};
 		Views: {
-			cuisinerestaurants: {
-				Row: {
-					cuisine_id: number | null;
-					cuisine_name: string | null;
-					restaurant_id: number | null;
-					restaurant_name: string | null;
-				};
-				Relationships: [];
-			};
+			[_ in never]: never;
 		};
 		Functions: {
 			nearby_restaurants:
