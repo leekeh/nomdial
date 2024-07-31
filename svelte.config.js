@@ -1,5 +1,6 @@
 import adapter from '@sveltejs/adapter-auto';
 import { vitePreprocess } from '@sveltejs/vite-plugin-svelte';
+import { utils } from 'prettier/doc.js';
 
 /** @type {import('@sveltejs/kit').Config} */
 const config = {
@@ -21,7 +22,8 @@ const config = {
 			components: 'src/lib/components',
 			icons: 'src/lib/icons',
 			types: 'src/lib/types',
-			store: 'src/lib/store'
+			store: 'src/lib/store',
+			util: 'src/lib/util'
 		}
 	}
 };

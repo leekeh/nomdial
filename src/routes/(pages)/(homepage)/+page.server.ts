@@ -9,7 +9,10 @@ const defaultLocation = {
 export async function load({ getClientAddress, fetch }) {
 	const clientLocation = await getLocationFromIpAsync(getClientAddress(), fetch);
 	const estimatedLocation = clientLocation.data || defaultLocation;
-	const restaurants = await getRestaurantsByLocationAsync(estimatedLocation, fetch);
+	const restaurants = await getRestaurantsByLocationAsync(
+		{ ...estimatedLocation, maxDist: 100 },
+		fetch
+	);
 	return {
 		restaurants,
 		estimatedLocation

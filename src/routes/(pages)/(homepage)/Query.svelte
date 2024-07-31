@@ -1,24 +1,30 @@
 <script lang="ts">
-	import { Button, Dialog, Input } from 'components';
+	import { Button, Combobox, Dialog, Input } from 'components';
 	import { cuisinesStore } from 'store';
-	import { formatConjunction } from './util';
 	import { FetchState, getCoordinates, type CoordinateResult } from 'api';
-	import type { Coordinates } from 'types';
-	import { array } from 'zod';
+	import CloseIcon from 'icons/CloseIcon.svelte';
 
 	type Props = {
 		updateRestaurants: (
 			location: { lat: number; lon: number; city: string },
-			selectedCuisineIds?: number[]
+			maxDistanceKm: number,
+			selectedCuisineIds: number[]
 		) => void;
 		selectedLocation: {
 			lat: number;
 			city: string;
 			lon: number;
 		};
+		selectedCuisines: { id: number; name: string }[];
+		maxDistanceKm: number;
 	};
 
-	let { updateRestaurants, selectedLocation = $bindable() }: Props = $props();
+	let {
+		updateRestaurants,
+		selectedLocation = $bindable(),
+		selectedCuisines = $bindable(),
+		maxDistanceKm = $bindable()
+	}: Props = $props();
 
 	let isDialogOpen = $state(false);
 
@@ -27,7 +33,6 @@
 	};
 
 	let possibleLocations = $state(new FetchState<CoordinateResult>());
-	let selectedCuisines = $state([]);
 
 	let query = $state('');
 	let isSearching = $state(false);
@@ -38,8 +43,13 @@
 	}
 
 	$effect(() => {
-		updateRestaurants(selectedLocation, selectedCuisines);
+		updateRestaurants(
+			selectedLocation,
+			maxDistanceKm,
+			selectedCuisines?.map((cuisine) => cuisine.id)
+		);
 	});
+
 	function handleSearchKeyDown(event: KeyboardEvent) {
 		if (event.key === 'Enter') {
 			triggerLookup();
@@ -83,39 +93,32 @@
 		possibleLocations = new FetchState<CoordinateResult>();
 		isSearching = false;
 	}
+
+	function addCuisine(cuisine: { id: number; name: string }) {
+		if (!selectedCuisines.some((c) => c.id === cuisine.id)) {
+			selectedCuisines.push(cuisine);
+		}
+	}
+
+	function removeCuisine(cuisine: { id: number; name: string }) {
+		selectedCuisines = selectedCuisines.filter((c) => c.id !== cuisine.id);
+	}
 </script>
 
-<div id="query">
-	<!-- {$cuisinesStore.map((store) => store.name).join('')} -->
-	<!-- I am looking for <select
-		bind:value={selectedCuisineId}
-		onchange={updateRestaurants}
-		name="cuisine"
-	>
-		<option value={0}>international</option>
-		<hr />
-		{#if data.availableCuisines.isLoading || !data.availableCuisines}
-			<option disabled>Loading...</option>
-		{:else}
-			<option disabled>Select a cuisine</option>
-			{#if data.availableCuisines?.data}
-				{#each data.availableCuisines.data as cuisine}
-					<option value={cuisine.id}>{cuisine.name}</option>
-				{/each}
-			{/if}
-		{/if}
-
-		<hr />
-		<option disabled>More options coming soon!</option>
-	</select>
-	cuisine near <input bind:value={selectedCity} onchange={lookupLocation} type="text" /> -->
-
+<div class="query">
+	International cuisine {new Intl.NumberFormat('en', {
+		style: 'unit',
+		unit: 'kilometer',
+		maximumFractionDigits: 0
+	}).format(maxDistanceKm)} from {selectedLocation.city}
 	<Button onclick={toggleDialog}>Refine search</Button>
 </div>
 
 <Dialog bind:isOpen={isDialogOpen} onClose={clearFields}>
 	<h1>Refine results</h1>
 	<p>Selected location: {selectedLocation.city}</p>
+
+	<Input label="Max distance (km)" type="number" bind:value={maxDistanceKm} />
 
 	{#if isSearching}
 		{#if possibleLocations.isLoading}
@@ -124,7 +127,7 @@
 			<p class="error">No locations were found. Please try again.</p>
 		{:else if possibleLocations.data}
 			<p>Found {availableLocations().length} locations:</p>
-			<ul>
+			<ul class="locations">
 				{#each availableLocations() as location}
 					<li>
 						<Button onclick={() => setLocation(location)}>
@@ -152,6 +155,39 @@
 	{/if}
 
 	<hr />
+
+	<h2>Filter by cuisines</h2>
+
+	{#if selectedCuisines.length === 0}
+		<p>No cuisines selected</p>
+	{:else}
+		<ul class="cuisines">
+			{#each selectedCuisines as cuisine}
+				<li>
+					<Button
+						ariaLabel={`Remove ${cuisine.name} from filter`}
+						onclick={() => removeCuisine(cuisine)}
+					>
+						{cuisine.name}
+						<CloseIcon />
+					</Button>
+				</li>
+			{/each}
+		</ul>
+	{/if}
+
+	<Combobox
+		name="dd"
+		label="Add cuisines"
+		placeholder="Type to search"
+		options={$cuisinesStore.map((cuisine) => ({
+			text: cuisine.name,
+			value: cuisine.id.toString()
+		}))}
+		onSelectOption={(option) => {
+			addCuisine({ id: Number(option.value), name: option.text });
+		}}
+	/>
 </Dialog>
 
 <style>
@@ -173,9 +209,31 @@
 		width: 80%;
 	}
 
-	ul {
+	.locations {
 		display: flex;
 		flex-direction: column;
 		gap: var(--grid-4);
+	}
+
+	.cuisines {
+		display: flex;
+		flex-direction: row;
+		gap: var(--grid-4);
+		flex-wrap: wrap;
+	}
+
+	.query {
+		background-color: #ffc;
+		padding: 1rem;
+		margin-top: 1rem;
+		margin-bottom: 1rem;
+		width: fit-content;
+		font-family: 'BambiHandwritten';
+		font-size: 2rem;
+		color: #284283;
+		box-shadow:
+			inset 0 -40px 40px rgba(184, 188, 80, 0.06),
+			inset 0 25px 10px rgba(224, 215, 45, 0.06),
+			0 5px 6px 5px rgba(0, 0, 0, 0.03);
 	}
 </style>

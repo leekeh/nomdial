@@ -5,6 +5,7 @@ type Props = {
 	lat: number;
 	lon: number;
 	cuisineIds?: number[];
+	maxDist: number;
 };
 
 const restaurantsByLocationSchema = z.array(
@@ -24,11 +25,12 @@ const restaurantsByLocationSchema = z.array(
 
 export type RestaurantsByLocation = z.infer<typeof restaurantsByLocationSchema>;
 
-export function getRestaurantsByLocation({ lat, lon, cuisineIds }: Props) {
+export function getRestaurantsByLocation({ lat, lon, cuisineIds, maxDist }: Props) {
 	const params = new URLSearchParams();
 	params.set('lat', lat.toString());
 	params.set('lon', lon.toString());
-	if (cuisineIds) {
+	params.set('maxDist', maxDist.toString());
+	if (cuisineIds?.length) {
 		params.set('cuisineIds', cuisineIds.join(','));
 	}
 

@@ -1,5 +1,4 @@
 <script lang="ts">
-	import type { ChangeEventHandler } from 'svelte/elements';
 	import { getRestaurantsByLocation } from 'api';
 	import Map from './Map.svelte';
 	import { Card } from 'components';
@@ -11,20 +10,24 @@
 
 	let selectedLocation = $state(data.estimatedLocation);
 	let restaurants = $state(data.restaurants);
+	let selectedCuisines = $state([]);
+	let maxDistanceKm = $state(100);
 
 	async function updateRestaurants(
 		location: { lat: number; lon: number; city: string },
+		maxDistanceKm: number,
 		selectedCuisineIds?: number[]
 	) {
 		restaurants = getRestaurantsByLocation({
 			lat: location.lat,
 			lon: location.lon,
-			cuisineIds: selectedCuisineIds
+			cuisineIds: selectedCuisineIds,
+			maxDist: maxDistanceKm
 		});
 	}
 </script>
 
-<Query bind:selectedLocation {updateRestaurants} />
+<Query bind:selectedLocation bind:selectedCuisines bind:maxDistanceKm {updateRestaurants} />
 
 <div class="layout">
 	<main>
@@ -43,8 +46,12 @@
 					<img src="egg.gif" alt="" style="outline: none" />
 					<p>Loading...</p>
 				</Card>
-			{:else if restaurants.error}
-				<p>There was an error loading the restaurants. Please try again later.</p>
+			{:else if restaurants.hasError}
+				{#if restaurants.error instanceof Error && restaurants.error.message === 'Not Found'}
+					<p>No restaurants were found. You can help by adding restaurants to the database.</p>
+				{:else}
+					<p>There was an error loading the restaurants. Please try again later.</p>
+				{/if}
 			{:else if !restaurants.data || restaurants.data?.length === 0}
 				<p>No restaurants were found. If you have any recommendations, please let us know!</p>
 			{:else}
@@ -76,20 +83,5 @@
 
 	.results {
 		overflow: auto;
-	}
-
-	#query {
-		background-color: #ffc;
-		padding: 1rem;
-		margin-top: 1rem;
-		margin-bottom: 1rem;
-		width: fit-content;
-		font-family: 'BambiHandwritten';
-		font-size: 2rem;
-		color: #284283;
-		box-shadow:
-			inset 0 -40px 40px rgba(184, 188, 80, 0.06),
-			inset 0 25px 10px rgba(224, 215, 45, 0.06),
-			0 5px 6px 5px rgba(0, 0, 0, 0.03);
 	}
 </style>

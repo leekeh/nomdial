@@ -27,6 +27,7 @@ export function APICall<T>(path: string, config: RequestInit, schema: Schema<T>)
 			result.hasError = false;
 		} catch (err) {
 			result.error = err;
+			console.log(typeof err);
 			result.hasError = true;
 			result.data = null;
 		}
