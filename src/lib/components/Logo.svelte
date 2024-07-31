@@ -1,4 +1,4 @@
-<p>Polynom</p>
+<p>Nomdial</p>
 
 <style>
 	p {

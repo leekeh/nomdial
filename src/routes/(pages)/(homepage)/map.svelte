@@ -69,6 +69,10 @@
 			map?.remove();
 		};
 	});
+
+	$effect(() => {
+		map?.flyTo({ lat: focus.lat, lng: focus.lon });
+	});
 </script>
 
 <div class="mapContainer">

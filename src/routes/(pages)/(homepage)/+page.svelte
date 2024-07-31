@@ -9,29 +9,27 @@
 
 	let { data } = $props();
 
-	let selectedCuisineId = $state(0);
-	let selectedCity = $state(data.estimatedLocation.city);
+	let selectedLocation = $state(data.estimatedLocation);
 	let restaurants = $state(data.restaurants);
-	let selectedCoordinates = { lat: data.estimatedLocation.lat, lon: data.estimatedLocation.lon };
 
-	function lookupLocation(evt: Parameters<ChangeEventHandler<HTMLInputElement>>['0']) {
-		//todo
-	}
-
-	async function updateRestaurants() {
+	async function updateRestaurants(
+		location: { lat: number; lon: number; city: string },
+		selectedCuisineIds?: number[]
+	) {
 		restaurants = getRestaurantsByLocation({
-			...selectedCoordinates,
-			cuisineIds: selectedCuisineId ? [selectedCuisineId] : undefined
+			lat: location.lat,
+			lon: location.lon,
+			cuisineIds: selectedCuisineIds
 		});
 	}
 </script>
 
-<Query />
+<Query bind:selectedLocation {updateRestaurants} />
 
 <div class="layout">
 	<main>
 		<Map
-			focus={selectedCoordinates}
+			focus={{ lat: selectedLocation.lat, lon: selectedLocation.lon }}
 			points={restaurants.data?.map((restaurant) => ({
 				id: restaurant.id,
 				label: restaurant.name,
@@ -93,11 +91,5 @@
 			inset 0 -40px 40px rgba(184, 188, 80, 0.06),
 			inset 0 25px 10px rgba(224, 215, 45, 0.06),
 			0 5px 6px 5px rgba(0, 0, 0, 0.03);
-	}
-
-	hr {
-		border-top: 2px solid currentColor;
-		filter: url(#displaced);
-		width: 50%;
 	}
 </style>

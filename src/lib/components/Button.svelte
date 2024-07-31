@@ -28,6 +28,7 @@
 		border-radius: 500px;
 		padding: 0.5rem 1rem;
 		filter: url(#squiggle);
+		font-size: 1.2rem;
 	}
 
 	.button:hover {

@@ -125,7 +125,7 @@ body {
 	background-color: var(--bg-primary);
 	color: var(--fg-primary);
 	accent-color: var(--color);
-	font-family: Halant, serif;
+	font-family: OldNewspaperTypes, serif;
 	font-size: 20px;
 }
 
@@ -135,7 +135,7 @@ h3,
 h4,
 h5,
 h6 {
-	font-family: Volkhov, serif;
+	font-family: OldNewspaperTypes, serif;
 }
 
 button {

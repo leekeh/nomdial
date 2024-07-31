@@ -4,10 +4,11 @@
 
 	type Props = {
 		children: Snippet;
+		onClose?: () => void;
 		isOpen: boolean;
 	};
 
-	let { children, isOpen = $bindable() }: Props = $props();
+	let { children, isOpen = $bindable(), onClose }: Props = $props();
 
 	let dialog: HTMLDialogElement;
 	onMount(async () => {
@@ -15,6 +16,11 @@
 		body.appendChild(dialog);
 		const dialogPolyfill = (await import('dialog-polyfill')).default;
 		dialogPolyfill.registerDialog(dialog);
+
+		dialog.addEventListener('close', () => {
+			isOpen = false;
+			onClose?.();
+		});
 
 		dialog.addEventListener('click', function (event) {
 			var rect = dialog.getBoundingClientRect();
@@ -42,7 +48,9 @@
 	<form method="dialog">
 		<Button ariaLabel="Close menu" type="submit">X</Button>
 	</form>
-	{@render children()}
+	<div class="content">
+		{@render children()}
+	</div>
 </dialog>
 
 <style>
@@ -82,5 +90,11 @@
 		float: right;
 		padding-left: var(--grid-2);
 		padding-bottom: var(--grid-2);
+	}
+
+	.content {
+		display: flex;
+		flex-direction: column;
+		gap: var(--grid-4);
 	}
 </style>

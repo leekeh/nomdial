@@ -12,7 +12,7 @@ export type Location = z.infer<typeof locationSchema>;
 export function getLocationFromIp(ip: string) {
 	const headers = new Headers();
 	headers.append('X-Forwarded-For', ip);
-	return APICall(`/api/locationFromIp/`, { method: 'GET', headers }, locationSchema);
+	return APICall(`locationFromIp/`, { method: 'GET', headers }, locationSchema);
 }
 
 export async function getLocationFromIpAsync(ip: string, passedFetch: Fetch) {

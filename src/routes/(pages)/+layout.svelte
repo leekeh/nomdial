@@ -48,6 +48,9 @@
 		padding-top: 4vh;
 		width: var(--window-width);
 		margin: auto;
+		display: flex;
+		flex-direction: column;
+		gap: var(--grid-4);
 	}
 
 	h1 {
@@ -58,9 +61,5 @@
 		h1 {
 			font-size: x-large;
 		}
-	}
-
-	footer {
-		margin-top: var(--grid-4);
 	}
 </style>

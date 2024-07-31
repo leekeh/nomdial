@@ -2,7 +2,7 @@ import type { PostgrestError } from '@supabase/supabase-js';
 import type { LoadEvent } from '@sveltejs/kit';
 import type { Schema } from 'zod';
 
-class FetchState<T> {
+export class FetchState<T> {
 	data: T | null = $state(null);
 	error: PostgrestError | unknown | null = $state(null);
 	hasError = $state(false);
