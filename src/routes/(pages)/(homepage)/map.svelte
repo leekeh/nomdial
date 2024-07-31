@@ -1,6 +1,6 @@
 <script lang="ts">
-	import type { Map, Icon } from 'leaflet';
-	import { onMount } from 'svelte';
+	import type { Map, Icon, LayerGroup } from 'leaflet';
+	import { onMount, onDestroy } from 'svelte';
 	import type { Coordinates } from 'types';
 	import { createRestaurantId } from './util';
 
@@ -11,6 +11,7 @@
 	let { focus, points }: Props = $props();
 
 	let map = $state<Map>();
+	let markerGroup = $state<LayerGroup>();
 	let icon = $state<Icon>();
 	onMount(() => {
 		icon = L.icon({
@@ -25,6 +26,7 @@
 			detectRetina: true,
 			maxZoom: 20
 		}).addTo(map);
+		markerGroup = L.layerGroup().addTo(map);
 		map!.setView([focus.lat, focus.lon], 13);
 		map!.setView([focus.lat, focus.lon], 13);
 
@@ -49,7 +51,7 @@
 				title: `marker ${point.id.toString()}`,
 				alt: point.label,
 				icon
-			}).addTo(map);
+			}).addTo(markerGroup);
 			const popup = document.createElement('div');
 			const label = document.createElement('p');
 			label.innerHTML = point.label;
@@ -66,7 +68,7 @@
 			marker.bindPopup(popup);
 		});
 		return () => {
-			map?.remove();
+			markerGroup!.clearLayers();
 		};
 	});
 

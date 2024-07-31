@@ -106,11 +106,14 @@
 </script>
 
 <div class="query">
-	International cuisine {new Intl.NumberFormat('en', {
-		style: 'unit',
-		unit: 'kilometer',
-		maximumFractionDigits: 0
-	}).format(maxDistanceKm)} from {selectedLocation.city}
+	{selectedCuisines.length === 1 ? selectedCuisines[0].name : 'International'} cuisine {new Intl.NumberFormat(
+		'en',
+		{
+			style: 'unit',
+			unit: 'kilometer',
+			maximumFractionDigits: 0
+		}
+	).format(maxDistanceKm)} from {selectedLocation.city}
 	<Button onclick={toggleDialog}>Refine search</Button>
 </div>
 
@@ -235,5 +238,7 @@
 			inset 0 -40px 40px rgba(184, 188, 80, 0.06),
 			inset 0 25px 10px rgba(224, 215, 45, 0.06),
 			0 5px 6px 5px rgba(0, 0, 0, 0.03);
+		display: flex;
+		gap: var(--grid-8);
 	}
 </style>
