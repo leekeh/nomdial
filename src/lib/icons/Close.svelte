@@ -1,5 +1,5 @@
 <script lang="ts">
-	import IconWrapper, { type Props } from './IconWrapper.svelte';
+	import IconWrapper from './IconWrapper.svelte';
 </script>
 
 <IconWrapper>
