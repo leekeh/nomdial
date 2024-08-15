@@ -56,7 +56,7 @@ export async function asyncAPICall<T>(
 		return {
 			data,
 			error: null,
-			hasError: true,
+			hasError: false,
 			isLoading: false
 		};
 	} catch (error) {
