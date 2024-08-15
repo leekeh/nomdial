@@ -6,12 +6,13 @@
 		hasBorder?: boolean;
 		tagName?: 'div' | 'li';
 		id?: string;
+		style?: string;
 	};
 
-	let { children, hasBorder = false, tagName = 'div', id }: Props = $props();
+	let { children, hasBorder = false, tagName = 'div', id, style }: Props = $props();
 </script>
 
-<svelte:element this={tagName} class="card" {id} class:hasBorder>
+<svelte:element this={tagName} class="card" {id} class:hasBorder {style}>
 	{@render children()}
 </svelte:element>
 
