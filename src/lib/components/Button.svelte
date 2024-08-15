@@ -24,7 +24,7 @@
 	.button {
 		font-family: 'OldNewspaperTypes';
 		background: #fff;
-		outline: 2px solid currentColor;
+		border: 2px solid currentColor;
 		border-radius: 1.5rem;
 		padding: 0.5rem 1rem;
 		filter: url(#squiggle);
