@@ -1,2 +1,2 @@
-export { anonKey, projectId, supabase, url } from './supabase';
+export { anonKey, projectId, url } from './supabase';
 export * from './supabase.schemas';

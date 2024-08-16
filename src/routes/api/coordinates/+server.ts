@@ -3,7 +3,11 @@ import { error, type RequestHandler } from '@sveltejs/kit';
 import { url } from 'db';
 import { SUPABASE_API_KEY, OPEN_WEATHER_API_KEY } from '$env/static/private';
 
-export const GET: RequestHandler = async function getCoordinates({ url: requestUrl, fetch }) {
+export const GET: RequestHandler = async function getCoordinates({
+	url: requestUrl,
+	fetch,
+	locals: { supabase }
+}) {
 	//Sanitize query to prevent security issues
 	const query = requestUrl.searchParams.get('query')?.replace(/[^\p{L}\d]/gu, '');
 
@@ -22,7 +26,7 @@ export const GET: RequestHandler = async function getCoordinates({ url: requestU
 		}
 	});
 
-	const cachedResult = await supabaseAdmin
+	const cachedResult = await supabase
 		.from('geocoding-cache')
 		.select('result')
 		.eq('query', query)

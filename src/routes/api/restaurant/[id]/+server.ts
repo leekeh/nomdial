@@ -1,7 +1,6 @@
 import { error, type RequestHandler } from '@sveltejs/kit';
-import { supabase } from 'db';
 
-export const GET: RequestHandler = async function getRestaurant({ params }) {
+export const GET: RequestHandler = async function getRestaurant({ params, locals: { supabase } }) {
 	const id = Number(params.id);
 	if (isNaN(id)) {
 		error(400, 'Invalid restaurant id');

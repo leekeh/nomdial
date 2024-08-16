@@ -155,3 +155,7 @@ a[target] {
 	color: #284283;
 	text-decoration: underline;
 }
+
+p {
+	max-width: 65ch;
+}

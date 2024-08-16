@@ -2,7 +2,7 @@
 	import { Button, Combobox, Dialog, Input } from 'components';
 	import { cuisinesStore } from 'store';
 	import { FetchState, getCoordinates, type CoordinateResult } from 'api';
-	import CloseIcon from 'icons/CloseIcon.svelte';
+	import { CloseIcon } from 'icons';
 
 	type Props = {
 		updateRestaurants: (

@@ -1,1 +1,2 @@
-export { cuisines as cuisinesStore } from './cuisines';
+export { cuisinesStore } from './cuisines';
+export { authStore } from './auth';

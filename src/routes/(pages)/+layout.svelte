@@ -1,8 +1,45 @@
 <script>
 	import { Logo, Card } from 'components';
-	import { cuisinesStore } from 'store';
+	import { authStore, cuisinesStore } from 'store';
+
+	import { invalidate } from '$app/navigation';
+	import { onMount } from 'svelte';
+	import Session from './Session.svelte';
 
 	let { children, data } = $props();
+
+	$effect(() => {
+		const {
+			supabase: { auth },
+			session,
+			user
+		} = data;
+		authStore.set({
+			session,
+			user,
+			auth
+		});
+	});
+
+	onMount(() => {
+		const {
+			supabase: { auth },
+			session,
+			user
+		} = data;
+		const { data: authData } = auth.onAuthStateChange((_, newSession) => {
+			authStore.update((oldStore) => ({ ...oldStore, session: newSession }));
+			const usedProvider = session?.user.app_metadata.provider;
+			if (usedProvider) {
+				localStorage.setItem('authProvider', usedProvider);
+			}
+			if (newSession?.expires_at !== session?.expires_at) {
+				invalidate('supabase:auth');
+			}
+		});
+
+		return () => authData.subscription.unsubscribe();
+	});
 
 	if (data.cuisines.data) {
 		cuisinesStore.set(data.cuisines.data);
@@ -12,6 +49,7 @@
 <div>
 	<heading>
 		<h1><Logo /></h1>
+		<Session />
 	</heading>
 	{@render children()}
 	<footer>
@@ -40,6 +78,11 @@
 </svg>
 
 <style>
+	heading {
+		display: flex;
+		justify-content: space-between;
+		align-items: center;
+	}
 	:global(body) {
 		background-image: url('/background.svg');
 		background-attachment: fixed;

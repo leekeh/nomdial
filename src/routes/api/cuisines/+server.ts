@@ -1,7 +1,6 @@
 import { error, type RequestHandler } from '@sveltejs/kit';
-import { supabase } from 'db';
 
-export const GET: RequestHandler = async function getCuisines() {
+export const GET: RequestHandler = async function getCuisines({ locals: { supabase } }) {
 	const result = await supabase.from('cuisines').select('name, id');
 
 	if (result.error) {

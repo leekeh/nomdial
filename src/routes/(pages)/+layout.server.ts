@@ -1,9 +1,16 @@
 import { getCuisinesAsync } from 'api';
 
-export async function load({ fetch }) {
+import type { LayoutServerLoad } from './$types';
+
+export const load: LayoutServerLoad = async ({ fetch, locals: { safeGetSession }, cookies }) => {
 	const cuisines = await getCuisinesAsync(fetch);
 
+	const { session, user } = await safeGetSession();
+
 	return {
-		cuisines
+		cuisines,
+		session,
+		user,
+		cookies: cookies.getAll()
 	};
-}
+};

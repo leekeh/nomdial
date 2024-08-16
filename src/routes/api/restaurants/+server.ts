@@ -1,7 +1,6 @@
 import { error, type RequestHandler } from '@sveltejs/kit';
-import { supabase } from 'db';
 
-export const GET: RequestHandler = async function getRestaurants({ url }) {
+export const GET: RequestHandler = async function getRestaurants({ url, locals: { supabase } }) {
 	const lat = Number(url.searchParams.get('lat'));
 	const lon = Number(url.searchParams.get('lon'));
 	const maxdist = Number(url.searchParams.get('maxDist'));

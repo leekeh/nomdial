@@ -22,7 +22,7 @@ const config = {
 			icons: 'src/lib/icons',
 			types: 'src/lib/types',
 			store: 'src/lib/store',
-			util: 'src/lib/util'
+			utils: 'src/lib/util'
 		}
 	}
 };

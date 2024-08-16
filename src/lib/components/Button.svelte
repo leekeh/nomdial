@@ -29,6 +29,9 @@
 		padding: 0.5rem 1rem;
 		filter: url(#squiggle);
 		font-size: 1.2rem;
+		display: flex;
+		align-items: center;
+		gap: 0.5rem;
 	}
 
 	.button:hover {
