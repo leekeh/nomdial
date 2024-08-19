@@ -82,6 +82,7 @@ button {
 	--grid-14: 56px;
 	/** Other */
 	--window-width: min(1440px, 90vw);
+	--subtle-shadow: rgba(100, 100, 111, 0.2) 0px 7px 29px 0px;
 }
 
 :root {
@@ -107,7 +108,7 @@ button {
 
 @font-face {
 	font-family: 'OceansideTypewriter';
-	src: url('fonts/fons/OceansideTypewriter.ttf');
+	src: url('fonts/OceansideTypewriter.ttf');
 	font-weight: normal;
 	font-style: italic;
 }
@@ -133,6 +134,7 @@ body {
 	accent-color: var(--color);
 	font-family: OldNewspaperTypes, serif;
 	font-size: 20px;
+	padding-top: 4vh;
 }
 
 h1,
@@ -158,4 +160,16 @@ a[target] {
 
 p {
 	max-width: 65ch;
+}
+
+.lined-paper {
+	background-color: white;
+	background-image: linear-gradient(white 23px, #3858aa);
+	background-size: 100% 24px;
+	font-family: 'BambiHandwritten';
+	font-size: 2rem;
+	color: #284283;
+	box-shadow: var(--subtle-shadow);
+	padding: 1rem;
+	padding-left: 50px;
 }

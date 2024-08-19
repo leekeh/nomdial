@@ -3,6 +3,7 @@
 	import { cuisinesStore } from 'store';
 	import { FetchState, getCoordinates, type CoordinateResult } from 'api';
 	import { CloseIcon } from 'icons';
+	import Sticky from './Sticky.svelte';
 
 	type Props = {
 		updateRestaurants: (
@@ -105,17 +106,7 @@
 	}
 </script>
 
-<div class="query">
-	{selectedCuisines.length === 1 ? selectedCuisines[0].name : 'International'} cuisine {new Intl.NumberFormat(
-		'en',
-		{
-			style: 'unit',
-			unit: 'kilometer',
-			maximumFractionDigits: 0
-		}
-	).format(maxDistanceKm)} from {selectedLocation.city}
-	<Button onclick={toggleDialog}>Refine search</Button>
-</div>
+<Sticky {selectedCuisines} {maxDistanceKm} city={selectedLocation.city} onclick={toggleDialog} />
 
 <Dialog bind:isOpen={isDialogOpen} onClose={clearFields}>
 	<h1>Refine results</h1>
@@ -223,22 +214,5 @@
 		flex-direction: row;
 		gap: var(--grid-4);
 		flex-wrap: wrap;
-	}
-
-	.query {
-		background-color: #ffc;
-		padding: 1rem;
-		margin-top: 1rem;
-		margin-bottom: 1rem;
-		width: fit-content;
-		font-family: 'BambiHandwritten';
-		font-size: 2rem;
-		color: #284283;
-		box-shadow:
-			inset 0 -40px 40px rgba(184, 188, 80, 0.06),
-			inset 0 25px 10px rgba(224, 215, 45, 0.06),
-			0 5px 6px 5px rgba(0, 0, 0, 0.03);
-		display: flex;
-		gap: var(--grid-8);
 	}
 </style>

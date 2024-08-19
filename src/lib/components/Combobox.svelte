@@ -325,7 +325,7 @@
 	}
 
 	input:hover {
-		box-shadow: rgba(100, 100, 111, 0.2) 0px 7px 29px 0px;
+		box-shadow: var(--subtle-shadow);
 	}
 
 	input:focus {
@@ -353,7 +353,7 @@
 		border-radius: 0 0 1.5rem 1.5rem;
 		border: 2px solid var(--accent-color);
 		border-top: 2px dashed currentColor;
-		box-shadow: rgba(100, 100, 111, 0.2) 0px 7px 29px 0px;
+		box-shadow: var(--subtle-shadow);
 	}
 
 	.list__no-results {

@@ -1,10 +1,11 @@
 <script>
-	import { Logo, Card } from 'components';
+	import { Logo } from 'components';
 	import { authStore, cuisinesStore } from 'store';
 
 	import { invalidate } from '$app/navigation';
 	import { onMount } from 'svelte';
 	import Session from './Session.svelte';
+	import TabNavigation from './TabNavigation.svelte';
 
 	let { children, data } = $props();
 
@@ -51,11 +52,13 @@
 		<h1><Logo /></h1>
 		<Session />
 	</heading>
-	{@render children()}
+	<TabNavigation>
+		{@render children()}
+	</TabNavigation>
 	<footer>
-		<Card hasBorder>
-			<p>© {new Date().getFullYear()} leekeh</p>
-		</Card>
+		<p>
+			© {new Date().getFullYear()} <a href="https://www.leekeh.com/" target="_blank">leekeh</a>
+		</p>
 	</footer>
 </div>
 
@@ -88,12 +91,34 @@
 		background-attachment: fixed;
 	}
 	div {
-		padding-top: 4vh;
 		width: var(--window-width);
 		margin: auto;
 		display: flex;
 		flex-direction: column;
 		gap: var(--grid-4);
+		position: relative;
+	}
+
+	@media (min-width: 768px) {
+		div {
+			padding: 1rem;
+		}
+
+		div::before {
+			content: '';
+			position: absolute;
+			top: 0;
+			left: 0;
+			width: 100%;
+			height: 100%;
+			background: beige;
+			z-index: -1;
+			background-image: url(cardboard.webp);
+			border-radius: 1rem;
+			box-shadow:
+				inset 0 0 10px rgba(0, 0, 0, 0.373),
+				rgba(0, 0, 0, 0.35) 0px 5px 15px;
+		}
 	}
 
 	h1 {
@@ -104,5 +129,22 @@
 		h1 {
 			font-size: x-large;
 		}
+	}
+
+	footer {
+		box-shadow: var(--subtle-shadow);
+		align-self: flex-end;
+		opacity: 0.8;
+		font-family: Times, serif;
+		font-size: 1.8rem;
+		color: rgba(188, 181, 143, 0.3);
+		text-shadow:
+			-1px -1px 0px rgba(255, 248, 209, 0.3),
+			1px 1px 0px rgba(76, 45, 8, 0.8);
+	}
+
+	footer a {
+		color: inherit;
+		text-decoration: none;
 	}
 </style>

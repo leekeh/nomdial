@@ -18,7 +18,7 @@
 				</h2>
 				<img src="https://placehold.co/200x200" alt="" />
 
-				{formatDistance(restaurant.dist_meters)}
+				{formatDistance(restaurant.dist_meters)} away
 				<p>
 					{formatConjunction(restaurant.cuisines)} cuisine
 				</p>
