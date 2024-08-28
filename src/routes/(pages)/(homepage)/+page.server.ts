@@ -1,4 +1,4 @@
-import { getLocationFromIpAsync, getRestaurantsByLocationAsync } from 'api';
+import { getLocationFromIPAsync, getRestaurantsByLocationAsync } from 'api';
 
 const defaultLocation = {
 	city: 'Utrecht',
@@ -7,7 +7,7 @@ const defaultLocation = {
 };
 
 export async function load({ getClientAddress, fetch }) {
-	const clientLocation = await getLocationFromIpAsync(getClientAddress(), fetch);
+	const clientLocation = await getLocationFromIPAsync(getClientAddress(), fetch);
 	const estimatedLocation = clientLocation.data || defaultLocation;
 	const restaurants = await getRestaurantsByLocationAsync(
 		{ ...estimatedLocation, maxDist: 100 },

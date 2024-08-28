@@ -30,4 +30,10 @@
 		flex-direction: column;
 		transform: rotate(-1deg);
 	}
+
+	button:hover {
+		text-decoration: underline;
+		text-decoration-thickness: 2px;
+		text-decoration-skip-ink: none;
+	}
 </style>

@@ -3,6 +3,7 @@
 	import { createRestaurantId, formatConjunction, formatDistance, zoomRestaurant } from './util';
 	import { Button, Card } from 'components';
 	import type { RestaurantsByLocation } from 'api';
+	import { createNavigationLink } from 'utils';
 
 	type Props = { restaurants: RestaurantsByLocation };
 
@@ -27,7 +28,7 @@
 					Address: {restaurant.address_lines?.join('\n')}
 				</address>
 				<a
-					href={`https://www.google.com/maps/dir/?api=1&destination=${restaurant.name}${restaurant.maps_id ? `&destination_place_id=${restaurant.maps_id}` : ''}`}
+					href={createNavigationLink({ name: restaurant.name, maps_id: restaurant.maps_id })}
 					target="_blank"
 				>
 					Get directions

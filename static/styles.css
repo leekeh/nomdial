@@ -107,6 +107,13 @@ button {
 }
 
 @font-face {
+	font-family: 'Caveat';
+	src: url('fonts/Caveat.ttf');
+	font-weight: normal;
+	font-style: normal;
+}
+
+@font-face {
 	font-family: 'OceansideTypewriter';
 	src: url('fonts/OceansideTypewriter.ttf');
 	font-weight: normal;
@@ -166,7 +173,7 @@ p {
 	background-color: white;
 	background-image: linear-gradient(white 23px, #3858aa);
 	background-size: 100% 24px;
-	font-family: 'BambiHandwritten';
+	font-family: 'Caveat';
 	font-size: 2rem;
 	color: #284283;
 	box-shadow: var(--subtle-shadow);

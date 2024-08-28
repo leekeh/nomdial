@@ -9,14 +9,14 @@ const locationSchema = z.object({
 
 export type Location = z.infer<typeof locationSchema>;
 
-export function getLocationFromIp(ip: string) {
+export function getLocationFromIP(ip: string) {
 	const headers = new Headers();
 	headers.append('X-Forwarded-For', ip);
-	return APICall(`locationFromIp/`, { method: 'GET', headers }, locationSchema);
+	return APICall(`locationFromIP/`, { method: 'GET', headers }, locationSchema);
 }
 
-export async function getLocationFromIpAsync(ip: string, passedFetch: Fetch) {
+export async function getLocationFromIPAsync(ip: string, passedFetch: Fetch) {
 	const headers = new Headers();
 	headers.append('X-Forwarded-For', ip);
-	return asyncAPICall(`locationFromIp/`, { method: 'GET', headers }, locationSchema, passedFetch);
+	return asyncAPICall(`locationFromIP/`, { method: 'GET', headers }, locationSchema, passedFetch);
 }

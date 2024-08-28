@@ -5,7 +5,7 @@ export {
 	getRestaurantsByLocation,
 	getRestaurantsByLocationAsync
 } from './restaurantsByLocation';
-export { type Location, getLocationFromIp, getLocationFromIpAsync } from './locations';
+export { type Location, getLocationFromIP, getLocationFromIPAsync } from './locations';
 export { type CoordinateResult, getCoordinates, getCoordinatesAsync } from './coordinates';
 
 export { FetchState } from './util.svelte';

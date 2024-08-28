@@ -52,6 +52,8 @@ export async function asyncAPICall<T>(
 		if (!response.ok) throw new Error(response.statusText);
 
 		const data: T = await response.json();
+		console.log(data);
+
 		schema.parse(data);
 		return {
 			data,
@@ -60,6 +62,7 @@ export async function asyncAPICall<T>(
 			isLoading: false
 		};
 	} catch (error) {
+		console.log({ error });
 		return {
 			data: null,
 			error: JSON.stringify(error),

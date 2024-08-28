@@ -5,7 +5,11 @@ export const GET: RequestHandler = async function getRestaurant({ params, locals
 	if (isNaN(id)) {
 		error(400, 'Invalid restaurant id');
 	}
-	const result = await supabase.from('restaurants').select().eq('id', id).maybeSingle();
+	const result = await supabase
+		.from('restaurants')
+		.select('*, cuisine_restaurants(cuisines(id, name))')
+		.eq('id', id)
+		.maybeSingle();
 
 	if (result.error) {
 		error(result.status, result.error);
@@ -13,5 +17,7 @@ export const GET: RequestHandler = async function getRestaurant({ params, locals
 	if (!result.data) {
 		error(404, 'No restaurants found');
 	}
+	result.data.cuisines = result.data.cuisine_restaurants.map((cr) => cr.cuisines);
+	delete result.data.cuisine_restaurants;
 	return new Response(JSON.stringify(result.data));
 };
